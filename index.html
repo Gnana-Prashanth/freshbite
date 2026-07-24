@@ -1,0 +1,393 @@
+<!-- 
+  FreshBite - Online Food Ordering Website
+  ------------------------------------------
+  This is a FRONTEND-ONLY project. There is no real database or server.
+  All food/cart/user data lives in JavaScript (see script.js).
+  
+  Structure of this file:
+  1. Navigation bar
+  2. Home section (hero + categories + featured dishes)
+  3. Restaurants section (grid with filters)
+  4. Menu section (food items with filters)
+  5. Cart section
+  6. Checkout section
+  7. Account section (login/register + profile)
+  8. About section
+  9. Contact section
+  Each "page" is actually a <section> that we show/hide with JavaScript,
+  so the whole site works without reloading the page (like a mini single-page app).
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreshBite - Online Food Ordering</title>
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts: a friendly rounded display font + clean body font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ============ NAVIGATION ============ -->
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <div class="logo" data-page="home">
+        <span class="logo-icon">🍕</span> FreshBite
+      </div>
+
+      <!-- Hamburger button, only visible on mobile -->
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#" data-page="home" class="nav-link active">Home</a></li>
+        <li><a href="#" data-page="restaurants" class="nav-link">Restaurants</a></li>
+        <li><a href="#" data-page="menu" class="nav-link">Menu</a></li>
+        <li><a href="#" data-page="about" class="nav-link">About</a></li>
+        <li><a href="#" data-page="contact" class="nav-link">Contact</a></li>
+        <li>
+          <a href="#" data-page="cart" class="nav-link cart-link">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="cart-count" id="cartCount">0</span>
+          </a>
+        </li>
+        <li><a href="#" data-page="account" class="nav-link"><i class="fa-solid fa-user"></i></a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ============ HOME PAGE ============ -->
+  <section id="home" class="page active-page">
+
+    <!-- Hero banner -->
+    <header class="hero">
+      <div class="container hero-inner">
+        <p class="eyebrow">Hungry? We've got you.</p>
+        <h1>Real food,<br>delivered fresh.</h1>
+        <p class="hero-sub">Order from your favorite local restaurants and get warm, delicious food at your door in minutes.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" data-page="restaurants">Order Now</button>
+          <button class="btn btn-ghost" data-page="menu">Browse Menu</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Restaurant categories -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Categories</h2>
+        <div class="category-grid" id="categoryGrid">
+          <!-- Filled by JavaScript using the `categories` array -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured dishes -->
+    <section class="section section-alt">
+      <div class="container">
+        <h2 class="section-title">Featured Dishes</h2>
+        <div class="food-grid" id="featuredGrid">
+          <!-- Filled by JavaScript using the `foodItems` array -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Special offer banner -->
+    <section class="section">
+      <div class="container">
+        <div class="offer-banner">
+          <div>
+            <h3>Get 20% off your first order</h3>
+            <p>Use code <strong>FRESH20</strong> at checkout</p>
+          </div>
+          <i class="fa-solid fa-tags offer-icon"></i>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <!-- ============ RESTAURANT LISTING PAGE ============ -->
+  <section id="restaurants" class="page">
+    <div class="container">
+      <h2 class="section-title">Restaurants</h2>
+
+      <!-- Filters: cuisine, rating, price -->
+      <div class="filters-bar">
+        <select id="filterCuisine" class="filter-select">
+          <option value="all">All Cuisines</option>
+          <option value="Italian">Italian</option>
+          <option value="American">American</option>
+          <option value="Indian">Indian</option>
+          <option value="Japanese">Japanese</option>
+          <option value="Mexican">Mexican</option>
+        </select>
+
+        <select id="filterRating" class="filter-select">
+          <option value="0">Any Rating</option>
+          <option value="4.5">4.5+ Stars</option>
+          <option value="4">4+ Stars</option>
+          <option value="3">3+ Stars</option>
+        </select>
+
+        <select id="filterPrice" class="filter-select">
+          <option value="all">Any Price</option>
+          <option value="$">$ Budget</option>
+          <option value="$$">$$ Moderate</option>
+          <option value="$$$">$$$ Premium</option>
+        </select>
+      </div>
+
+      <div class="restaurant-grid" id="restaurantGrid">
+        <!-- Filled by JavaScript using the `restaurants` array -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MENU PAGE ============ -->
+  <section id="menu" class="page">
+    <div class="container">
+      <h2 class="section-title">Our Menu</h2>
+
+      <!-- Dietary tag filters -->
+      <div class="filters-bar">
+        <button class="tag-filter active" data-diet="all">All</button>
+        <button class="tag-filter" data-diet="veg">🟢 Veg</button>
+        <button class="tag-filter" data-diet="nonveg">🔴 Non-Veg</button>
+        <button class="tag-filter" data-diet="gluten-free">🌾 Gluten-Free</button>
+      </div>
+
+      <div class="food-grid" id="menuGrid">
+        <!-- Filled by JavaScript using the `foodItems` array -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRODUCT DETAIL MODAL ============ -->
+  <!-- This overlays on top of the page instead of being a separate page -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal-box">
+      <button class="modal-close" id="closeModalBtn">&times;</button>
+      <div id="productModalContent">
+        <!-- Filled by JavaScript when a food item is clicked -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SHOPPING CART PAGE ============ -->
+  <section id="cart" class="page">
+    <div class="container">
+      <h2 class="section-title">Your Cart</h2>
+
+      <div id="cartEmptyMsg" class="empty-msg" style="display:none;">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <p>Your cart is empty. Go add something delicious!</p>
+        <button class="btn btn-primary" data-page="menu">Browse Menu</button>
+      </div>
+
+      <div class="cart-layout" id="cartLayout">
+        <div class="cart-items" id="cartItemsList">
+          <!-- Filled by JavaScript using the `cart` array -->
+        </div>
+
+        <div class="cart-summary">
+          <h3>Order Summary</h3>
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="cartSubtotal">$0.00</span>
+          </div>
+          <div class="summary-row">
+            <span>Delivery Fee</span>
+            <span id="cartDelivery">$2.99</span>
+          </div>
+          <div class="summary-row total-row">
+            <span>Total</span>
+            <span id="cartTotal">$0.00</span>
+          </div>
+          <button class="btn btn-primary btn-full" data-page="checkout">Proceed to Checkout</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CHECKOUT PAGE ============ -->
+  <section id="checkout" class="page">
+    <div class="container">
+      <h2 class="section-title">Checkout</h2>
+
+      <form class="checkout-layout" id="checkoutForm">
+        <div class="checkout-form">
+          <h3>Delivery Address</h3>
+          <input type="text" placeholder="Full Name" required>
+          <input type="text" placeholder="Street Address" required>
+          <div class="form-row">
+            <input type="text" placeholder="City" required>
+            <input type="text" placeholder="ZIP Code" required>
+          </div>
+
+          <h3>Delivery Time</h3>
+          <select id="deliveryTime">
+            <option value="asap">As soon as possible (30-40 min)</option>
+            <option value="1hr">In 1 hour</option>
+            <option value="2hr">In 2 hours</option>
+          </select>
+
+          <h3>Payment Method</h3>
+          <div class="payment-options">
+            <label class="payment-option">
+              <input type="radio" name="payment" value="card" checked> Credit / Debit Card
+            </label>
+            <label class="payment-option">
+              <input type="radio" name="payment" value="cod"> Cash on Delivery
+            </label>
+            <label class="payment-option">
+              <input type="radio" name="payment" value="wallet"> Digital Wallet
+            </label>
+          </div>
+        </div>
+
+        <div class="cart-summary">
+          <h3>Order Summary</h3>
+          <div id="checkoutItemsSummary"><!-- filled by JS --></div>
+          <div class="summary-row total-row">
+            <span>Total</span>
+            <span id="checkoutTotal">$0.00</span>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Place Order</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ ACCOUNT PAGE (Login/Register + Profile) ============ -->
+  <section id="account" class="page">
+    <div class="container">
+
+      <!-- Shown when user is NOT logged in -->
+      <div id="authBox" class="auth-box">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-tab="login">Login</button>
+          <button class="auth-tab" data-tab="register">Register</button>
+        </div>
+
+        <form id="loginForm" class="auth-form">
+          <input type="email" placeholder="Email" required>
+          <input type="password" placeholder="Password" required>
+          <button type="submit" class="btn btn-primary btn-full">Login</button>
+        </form>
+
+        <form id="registerForm" class="auth-form" style="display:none;">
+          <input type="text" placeholder="Full Name" required>
+          <input type="email" placeholder="Email" required>
+          <input type="password" placeholder="Password" required>
+          <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+        </form>
+      </div>
+
+      <!-- Shown when user IS logged in -->
+      <div id="profileBox" class="profile-box" style="display:none;">
+        <div class="profile-header">
+          <div class="profile-avatar"><i class="fa-solid fa-user"></i></div>
+          <div>
+            <h2 id="profileName">User</h2>
+            <p id="profileEmail">user@example.com</p>
+          </div>
+          <button class="btn btn-ghost" id="logoutBtn">Logout</button>
+        </div>
+
+        <div class="profile-tabs">
+          <h3>Order History</h3>
+          <div id="orderHistoryList" class="order-history">
+            <p class="empty-msg-small">No orders yet.</p>
+          </div>
+
+          <h3>Saved Addresses</h3>
+          <div class="saved-address">
+            <i class="fa-solid fa-location-dot"></i> 123 Maple Street, Springfield
+          </div>
+
+          <h3>Wishlist</h3>
+          <div class="food-grid" id="wishlistGrid">
+            <p class="empty-msg-small">Your wishlist is empty.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ ABOUT US PAGE ============ -->
+  <section id="about" class="page">
+    <div class="container about-content">
+      <h2 class="section-title">About FreshBite</h2>
+      <p>FreshBite started with a simple idea: everyone deserves great food without the wait. We partner with the best local restaurants to bring fresh, delicious meals straight to your door.</p>
+
+      <div class="about-grid">
+        <div class="about-card">
+          <i class="fa-solid fa-leaf"></i>
+          <h3>Our Story</h3>
+          <p>Founded in 2020 by a small team of food lovers, FreshBite has grown into a platform connecting hundreds of restaurants with hungry customers every day.</p>
+        </div>
+        <div class="about-card">
+          <i class="fa-solid fa-users"></i>
+          <h3>Our Team</h3>
+          <p>A passionate group of foodies, developers, and delivery partners working together to make every order a great experience.</p>
+        </div>
+        <div class="about-card">
+          <i class="fa-solid fa-award"></i>
+          <h3>Our Awards</h3>
+          <p>Recognized as "Best Food Delivery Startup 2023" and trusted by over 50,000 happy customers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT US PAGE ============ -->
+  <section id="contact" class="page">
+    <div class="container">
+      <h2 class="section-title">Contact Us</h2>
+
+      <div class="contact-layout">
+        <div class="contact-info">
+          <p><i class="fa-solid fa-location-dot"></i> 456 Food Street, Flavor Town, FT 12345</p>
+          <p><i class="fa-solid fa-clock"></i> Open Daily: 9:00 AM - 11:00 PM</p>
+          <p><i class="fa-solid fa-phone"></i> +1 (555) 123-4567</p>
+          <p><i class="fa-solid fa-envelope"></i> hello@freshbite.com</p>
+
+          <!-- Simple embedded map placeholder (no API key needed) -->
+          <div class="map-placeholder">
+            <i class="fa-solid fa-map-location-dot"></i>
+            <p>Map location: Flavor Town</p>
+          </div>
+        </div>
+
+        <form class="contact-form" id="contactForm">
+          <h3>Send us a message</h3>
+          <input type="text" placeholder="Your Name" required>
+          <input type="email" placeholder="Your Email" required>
+          <textarea placeholder="Your Message" rows="5" required></textarea>
+          <button type="submit" class="btn btn-primary btn-full">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 FreshBite. Built as a web development internship project.</p>
+    </div>
+  </footer>
+
+  <!-- Toast notification (e.g. "Added to cart!") -->
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
