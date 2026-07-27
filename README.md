@@ -36,11 +36,33 @@ in the brief, and demonstrates a bit of extra polish).
 ## File Structure
 ```
 freshbite/
-├── index.html      # All pages (shown/hidden via JavaScript)
+├── index.html       # All pages (shown/hidden via JavaScript)
 ├── style.css        # All styling, organized by section
 ├── script.js        # All data + interactivity, organized by section
+├── screenshots/     # Web-interface screenshots
 └── README.md
 ```
+## How to Run
+1. Download or clone this repository
+2. Open the `freshbite` folder
+3. Double-click `index.html` to open it directly in your browser
+
+   OR, for live-reload while editing:
+4. Open the folder in VS Code
+5. Install the "Live Server" extension
+6. Right-click `index.html` → "Open with Live Server"
+
+No installation, build step, or server setup required — this is a static
+frontend-only project (HTML, CSS, JavaScript).
+
+## Screenshots
+
+
+![Home Page](screenshots/home1.png)
+
+
+
+![Menu Page](screenshots/menu.png)
 
 ## How the Single-Page Navigation Works
 Instead of separate HTML files for every page, each "page" is a `<section class="page">`
